@@ -27,7 +27,8 @@ import {
   Sparkles,
   Layers,
   Filter,
-  Camera
+  Camera,
+  ClipboardList
 } from 'lucide-react';
 import { 
   ResponsiveContainer, 
@@ -1296,6 +1297,196 @@ export const Dashboard: React.FC = () => {
             ))
           )}
         </div>
+      </div>
+
+      {/* 6. QUICK ACTION & RECENT ACTIVITY */}
+      <div className="responsive-charts-grid">
+
+        {/* Quick Action + Performa Da'i */}
+        <Card style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          {/* Quick Action Button */}
+          <button
+            onClick={() => navigate('/input')}
+            style={{
+              width: '100%',
+              padding: '16px',
+              background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
+              color: 'white',
+              border: 'none',
+              borderRadius: 'var(--radius-md)',
+              fontSize: '15px',
+              fontWeight: 700,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '10px',
+              boxShadow: '0 4px 16px rgba(59, 130, 246, 0.35)',
+              transition: 'all 0.2s ease'
+            }}
+          >
+            <ClipboardList size={20} />
+            Input Amaliyah Masal
+            <ArrowUpRight size={18} />
+          </button>
+
+          {/* Performa Da'i Leaderboard */}
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
+              <Award size={18} color="#8b5cf6" />
+              <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 700, color: 'var(--color-text)' }}>
+                Performa Da'i Pembina
+              </h3>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {mockDai.map((dai, idx) => {
+                const daiTrx = mockHistory.filter(h => h.id_dai === dai.id_dai);
+                const daiPoin = daiTrx.reduce((sum, h) => {
+                  const a = mockAmaliyah.find(item => item.id_amaliyah === h.id_amaliyah);
+                  return sum + (a?.poin || 0);
+                }, 0);
+                const daiWarga = mockWarga.filter(w => w.id_dai === dai.id_dai).length;
+                const maxTrx = Math.max(...mockDai.map(d => mockHistory.filter(h => h.id_dai === d.id_dai).length), 1);
+                const persen = Math.round((daiTrx.length / maxTrx) * 100);
+
+                return (
+                  <div key={dai.id_dai} style={{
+                    padding: '14px',
+                    borderRadius: 'var(--radius-md)',
+                    backgroundColor: idx === 0 ? 'rgba(139, 92, 246, 0.06)' : 'var(--color-bg)',
+                    border: idx === 0 ? '1px solid rgba(139, 92, 246, 0.15)' : '1px solid rgba(0,0,0,0.04)'
+                  }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <div style={{
+                          width: '36px', height: '36px', borderRadius: '50%',
+                          background: idx === 0 ? 'linear-gradient(135deg, #8b5cf6, #6d28d9)' : 'rgba(0,0,0,0.06)',
+                          color: idx === 0 ? 'white' : 'var(--color-text)',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          fontWeight: 800, fontSize: '14px'
+                        }}>
+                          {idx + 1}
+                        </div>
+                        <div>
+                          <div style={{ fontWeight: 700, fontSize: '14px', color: 'var(--color-text)' }}>{dai.nama}</div>
+                          <div style={{ fontSize: '11px', color: 'var(--color-text-light)' }}>{dai.regional} • {daiWarga} Warga Binaan</div>
+                        </div>
+                      </div>
+                      <div style={{ textAlign: 'right' }}>
+                        <div style={{ fontSize: '16px', fontWeight: 700, color: '#8b5cf6' }}>{daiPoin.toLocaleString()} <span style={{ fontSize: '11px' }}>Pts</span></div>
+                        <div style={{ fontSize: '11px', color: 'var(--color-text-light)' }}>{daiTrx.length} setoran</div>
+                      </div>
+                    </div>
+                    {/* Progress bar */}
+                    <div style={{ height: '5px', borderRadius: '10px', backgroundColor: 'rgba(0,0,0,0.06)', overflow: 'hidden' }}>
+                      <div style={{
+                        height: '100%',
+                        width: `${persen}%`,
+                        borderRadius: '10px',
+                        background: idx === 0 ? 'linear-gradient(90deg, #8b5cf6, #6d28d9)' : 'linear-gradient(90deg, #3b82f6, #60a5fa)',
+                        transition: 'width 0.5s ease'
+                      }} />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </Card>
+
+        {/* Riwayat Setoran Terkini */}
+        <Card style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <TrendingUp size={18} color="var(--color-primary)" />
+              <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 700, color: 'var(--color-text)' }}>
+                Riwayat Setoran Terkini
+              </h3>
+            </div>
+            <span style={{ fontSize: '11px', color: 'var(--color-text-light)', fontWeight: 600 }}>
+              5 Transaksi Terbaru
+            </span>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {[...mockHistory]
+              .sort((a, b) => b.tanggal.localeCompare(a.tanggal))
+              .slice(0, 5)
+              .map((trx) => {
+                const w = mockWarga.find(item => item.id_warga === trx.id_warga);
+                const a = mockAmaliyah.find(item => item.id_amaliyah === trx.id_amaliyah);
+                const dai = mockDai.find(d => d.id_dai === trx.id_dai);
+                return (
+                  <div
+                    key={trx.id_trx}
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      padding: '12px 14px',
+                      borderRadius: 'var(--radius-md)',
+                      backgroundColor: 'var(--color-bg)',
+                      border: '1px solid rgba(0,0,0,0.04)',
+                      transition: 'all 0.15s ease'
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <div style={{
+                        width: '38px', height: '38px', borderRadius: '10px',
+                        backgroundColor: a?.kategori === 'wajib' ? 'rgba(59, 130, 246, 0.12)' : a?.kategori === 'sunnah' ? 'rgba(16, 185, 129, 0.12)' : 'rgba(245, 158, 11, 0.12)',
+                        color: a?.kategori === 'wajib' ? '#3b82f6' : a?.kategori === 'sunnah' ? '#10b981' : '#f59e0b',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center'
+                      }}>
+                        <Award size={18} />
+                      </div>
+                      <div>
+                        <div style={{ fontWeight: 700, fontSize: '13px', color: 'var(--color-text)' }}>
+                          {w?.nama || trx.id_warga}
+                        </div>
+                        <div style={{ fontSize: '11px', color: 'var(--color-text-light)' }}>
+                          {a?.nama || trx.id_amaliyah} • {dai?.nama || trx.id_dai}
+                        </div>
+                        <div style={{ fontSize: '10px', color: 'var(--color-text-light)', marginTop: '1px' }}>
+                          {trx.tanggal}
+                        </div>
+                      </div>
+                    </div>
+                    <div style={{ textAlign: 'right' }}>
+                      <div style={{ fontWeight: 700, fontSize: '14px', color: 'var(--color-accent)' }}>
+                        +{a?.poin || 0} Pts
+                      </div>
+                      <span style={{ fontSize: '10px', color: '#10b981', fontWeight: 600 }}>
+                        +{trx.kwh_meter} kWh
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+          </div>
+
+          <button
+            onClick={() => navigate('/history')}
+            style={{
+              width: '100%',
+              padding: '10px',
+              backgroundColor: 'var(--color-bg)',
+              border: '1px solid rgba(0,0,0,0.08)',
+              borderRadius: 'var(--radius-md)',
+              color: 'var(--color-primary)',
+              fontSize: '13px',
+              fontWeight: 600,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '6px',
+              transition: 'all 0.15s ease'
+            }}
+          >
+            Lihat Semua Rekapan Warga <ChevronRight size={16} />
+          </button>
+        </Card>
       </div>
 
       {/* Modal Detail Titik Koordinat PV Off-Grid */}
