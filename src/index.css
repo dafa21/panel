@@ -1,0 +1,517 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+@import "leaflet/dist/leaflet.css";
+
+:root {
+  /* Premium Color Palette */
+  --color-primary: #3b82f6;       /* Blue 500 */
+  --color-primary-hover: #2563eb; /* Blue 600 */
+  --color-primary-light: #eff6ff; /* Blue 50 */
+  --color-bg: #f8fafc;            /* Slate 50 */
+  --color-surface: rgba(255, 255, 255, 0.85); /* Glass surface */
+  --color-text: #0f172a;          /* Slate 900 */
+  --color-text-light: #64748b;    /* Slate 500 */
+  --color-accent: #f59e0b;        /* Amber 500 */
+  
+  /* Modern Shadows & Effects */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+  --shadow-primary: 0 4px 14px 0 rgba(59, 130, 246, 0.25);
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.5);
+  --glass-backdrop: blur(12px);
+  
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+  
+  --font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--color-bg);
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(210, 100%, 93%, 0.5) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, hsla(200, 100%, 93%, 0.5) 0px, transparent 50%);
+  background-attachment: fixed;
+  color: var(--color-text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  color: var(--color-text);
+  letter-spacing: -0.02em;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+a:hover {
+  color: var(--color-primary-hover);
+}
+
+button {
+  font-family: var(--font-family);
+}
+
+/* Utilities */
+.text-primary { color: var(--color-primary); }
+.text-accent { color: var(--color-accent); }
+.text-muted { color: var(--color-text-light); }
+
+.bg-primary { background-color: var(--color-primary); color: white; }
+.bg-surface { 
+  background-color: var(--color-surface); 
+  backdrop-filter: var(--glass-backdrop);
+  -webkit-backdrop-filter: var(--glass-backdrop);
+  border: var(--glass-border);
+}
+
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Dark Theme Palette */
+[data-theme="dark"] {
+  --color-primary: #60a5fa;       /* Light Blue */
+  --color-primary-hover: #3b82f6;
+  --color-primary-light: #1e293b;
+  --color-bg: #0b1120;            /* Deep dark slate */
+  --color-surface: rgba(17, 24, 39, 0.85);
+  --color-text: #f8fafc;
+  --color-text-light: #94a3b8;
+  --color-accent: #fbbf24;
+  --glass-bg: rgba(17, 24, 39, 0.75);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.08);
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="dark"] body {
+  background-color: var(--color-bg);
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.2) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(15, 23, 42, 0.9) 0px, transparent 50%);
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+
+/* =========================================================
+   RESPONSIVE UTILITIES FOR MOBILE (360px - 768px) & DESKTOP
+   ========================================================= */
+
+.page-container {
+  width: 100%;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: fadeIn 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .page-container {
+    padding: 14px 12px 24px;
+    gap: 16px;
+  }
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 640px) {
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+}
+
+@media (max-width: 380px) {
+  .kpi-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
+
+/* 2-Column Desktop Grid that collapses to 1 column on tablet/mobile */
+.responsive-two-col {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 960px) {
+  .responsive-two-col {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+.responsive-two-col-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 960px) {
+  .responsive-two-col-form {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+.responsive-charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .responsive-charts-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+}
+
+.responsive-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 480px) {
+  .responsive-grid-2 {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
+
+.responsive-header-title {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+@media (max-width: 640px) {
+  .responsive-header-title {
+    font-size: 20px;
+  }
+}
+
+.map-container-responsive {
+  height: 400px;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .map-container-responsive {
+    height: 280px;
+  }
+}
+
+/* Modal Overlay untuk Pratinjau Dokumen PDF */
+.report-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+@media (max-width: 640px) {
+  .report-modal-backdrop {
+    padding: 10px;
+  }
+}
+
+/* Styling Lembar Halaman Standar A4 (Screen & Print) */
+.a4-page-sheet {
+  width: 800px;
+  height: 1132px;
+  min-height: 1132px;
+  max-height: 1132px;
+  margin: 0 auto 24px auto;
+  background-color: #ffffff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+  padding: 30px 34px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  position: relative;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: #0f172a;
+  line-height: 1.45;
+}
+
+/* Aturan Cetak Format A4 Resmi */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+
+  *, *:before, *:after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .no-print,
+  nav,
+  aside,
+  header,
+  .sidebar,
+  .sidebar-desktop,
+  .mobile-bottom-nav,
+  .app-sidebar {
+    display: none !important;
+  }
+
+  .printable-modal-backdrop {
+    position: static !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    z-index: auto !important;
+    display: block !important;
+  }
+
+  .printable-document-card {
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+  }
+
+  .a4-page-sheet {
+    width: 210mm !important;
+    height: 297mm !important;
+    min-height: 297mm !important;
+    max-height: 297mm !important;
+    margin: 0 !important;
+    padding: 12mm 15mm !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    page-break-after: always !important;
+    page-break-inside: avoid !important;
+    break-after: page !important;
+    break-inside: avoid !important;
+    box-sizing: border-box !important;
+  }
+
+  .a4-page-sheet:last-child {
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+  }
+
+  .avoid-break {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+}
+
+/* Custom Solar PV Map Marker */
+.pv-map-marker {
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4));
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.25s ease;
+  cursor: pointer;
+}
+
+.pv-map-marker:hover {
+  transform: scale(1.2) translateY(-4px);
+  filter: drop-shadow(0 8px 14px rgba(16, 185, 129, 0.6));
+  z-index: 1000 !important;
+}
+
+/* Responsive Header Titles */
+.responsive-header-title {
+  font-size: clamp(18px, 3.5vw, 24px);
+  font-weight: 800;
+  line-height: 1.25;
+  color: var(--color-text);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+/* Modal Responsive Container & Header */
+.pv-modal-card {
+  width: 100%;
+  max-width: 920px;
+  max-height: 92vh;
+  background-color: var(--color-surface);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: fadeInScale 0.2s ease-out;
+}
+
+.pv-modal-header {
+  padding: 14px 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  background-color: var(--color-surface);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pv-modal-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+}
+
+.pv-modal-title-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
+}
+
+.pv-modal-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--color-text);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pv-modal-badges {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.pv-modal-header-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.pv-modal-subtitle {
+  margin: 0;
+  font-size: 12px;
+  color: var(--color-text-light);
+  line-height: 1.4;
+  flex: 1;
+  min-width: 180px;
+}
+
+.pv-modal-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  .pv-modal-header {
+    padding: 12px 14px;
+    gap: 8px;
+  }
+
+  .pv-modal-title {
+    font-size: 16px;
+    white-space: normal;
+    word-break: normal;
+    line-height: 1.25;
+  }
+
+  .pv-modal-subtitle {
+    font-size: 11px;
+    min-width: 100%;
+    order: 2;
+  }
+
+  .pv-modal-actions {
+    width: 100%;
+    order: 1;
+    justify-content: flex-start;
+  }
+}
+
