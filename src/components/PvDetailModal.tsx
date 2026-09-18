@@ -78,8 +78,10 @@ export const PvDetailModal: React.FC<PvDetailModalProps> = ({
     setTimeout(() => setIsCopied(false), 2200);
   };
 
-  const handleOpenGoogleMaps = () => {
-    window.open(`https://www.google.com/maps?q=${pv.latitude},${pv.longitude}`, '_blank');
+  const handleOpenGoogleMaps = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    const url = `https://www.google.com/maps/search/?api=1&query=${pv.latitude},${pv.longitude}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   const handleEditClick = () => {
@@ -259,6 +261,28 @@ export const PvDetailModal: React.FC<PvDetailModalProps> = ({
               >
                 <Edit3 size={13} color="var(--color-primary)" />
                 <span>Edit di Setting PV</span>
+              </button>
+              <button
+                onClick={handleOpenGoogleMaps}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '5px',
+                  padding: '5px 11px',
+                  borderRadius: '8px',
+                  border: '1px solid rgba(59, 130, 246, 0.3)',
+                  backgroundColor: 'rgba(59, 130, 246, 0.08)',
+                  color: '#3b82f6',
+                  fontSize: '11px',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  whiteSpace: 'nowrap',
+                  transition: 'all 0.15s'
+                }}
+                title="Buka lokasi di Google Maps"
+              >
+                <MapPin size={13} />
+                <span>Google Maps</span>
               </button>
             </div>
           </div>
@@ -739,8 +763,11 @@ export const PvDetailModal: React.FC<PvDetailModalProps> = ({
                   <Copy size={13} />
                   {isCopied ? '✓ Tersalin!' : 'Salin Koordinat'}
                 </button>
-                <button
-                  onClick={handleOpenGoogleMaps}
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${pv.latitude},${pv.longitude}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
                   style={{
                     padding: '6px 12px',
                     borderRadius: '8px',
@@ -749,14 +776,16 @@ export const PvDetailModal: React.FC<PvDetailModalProps> = ({
                     color: 'white',
                     fontSize: '11px',
                     fontWeight: 600,
+                    textDecoration: 'none',
                     cursor: 'pointer',
-                    display: 'flex',
+                    display: 'inline-flex',
                     alignItems: 'center',
                     gap: '5px'
                   }}
+                  title="Buka lokasi ini langsung di Google Maps"
                 >
                   <ExternalLink size={13} /> Buka Google Maps
-                </button>
+                </a>
               </div>
             </div>
 

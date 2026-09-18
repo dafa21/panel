@@ -3,9 +3,9 @@ import { Card } from '../components/Card';
 import { Input } from '../components/Input';
 import { Select } from '../components/Select';
 import { Button } from '../components/Button';
+import { useAmaliyah } from '../context/AmaliyahContext';
 import { 
   mockWarga, 
-  mockAmaliyah, 
   mockDai, 
   mockHistory, 
   NILAI_KONVERSI, 
@@ -53,6 +53,7 @@ const LocationMarker = ({ position, setPosition }: { position: L.LatLng | null, 
 };
 
 export const FormDai: React.FC = () => {
+  const { amaliyahList } = useAmaliyah();
   const [activeTab, setActiveTab] = useState<'lama' | 'baru'>('lama');
 
   // State Warga Lama (Amaliyah Masal)
@@ -84,7 +85,7 @@ export const FormDai: React.FC = () => {
   // 1. Dashboard KPI Data
   const totalLaporan = historyList.length;
   const totalPoinTersalurkan = historyList.reduce((sum, h) => {
-    const a = mockAmaliyah.find(item => item.id_amaliyah === h.id_amaliyah);
+    const a = amaliyahList.find(item => item.id_amaliyah === h.id_amaliyah);
     return sum + (a?.poin || 0);
   }, 0);
   const totalWargaAktif = wargaList.length;
@@ -92,8 +93,8 @@ export const FormDai: React.FC = () => {
 
   // Selected Amaliyah Object
   const amaliyahObj = useMemo(() => {
-    return mockAmaliyah.find(a => a.id_amaliyah === selectedAmaliyah);
-  }, [selectedAmaliyah]);
+    return amaliyahList.find(a => a.id_amaliyah === selectedAmaliyah);
+  }, [selectedAmaliyah, amaliyahList]);
 
   // Selected Citizens
   const totalWargaTerpilih = Object.values(wargaChecked).filter(Boolean).length;
@@ -211,7 +212,7 @@ export const FormDai: React.FC = () => {
       .slice(0, 5)
       .map(t => {
         const w = wargaList.find(item => item.id_warga === t.id_warga);
-        const a = mockAmaliyah.find(item => item.id_amaliyah === t.id_amaliyah);
+        const a = amaliyahList.find((item: any) => item.id_amaliyah === t.id_amaliyah);
         return {
           ...t,
           wargaNama: w?.nama || t.id_warga,
@@ -420,7 +421,7 @@ export const FormDai: React.FC = () => {
                   label="Pilih nama kegiatan amaliyah"
                   options={[
                     { value: '', label: '-- Pilih Opsi Amaliyah --' },
-                    ...mockAmaliyah.map(a => ({ 
+                    ...amaliyahList.map((a: any) => ({ 
                       value: a.id_amaliyah, 
                       label: `${a.nama} (+${a.poin} Pts | ${a.kategori.toUpperCase()})` 
                     }))

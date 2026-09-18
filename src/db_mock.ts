@@ -20,8 +20,11 @@ export interface Dai {
 export interface Amaliyah {
   id_amaliyah: string;
   nama: string;
-  kategori: 'wajib' | 'sunnah' | 'sosial';
+  kategori: 'wajib' | 'sunnah' | 'sosial' | 'dakwah' | 'pendidikan' | 'kebersihan';
   poin: number;
+  deskripsi?: string;
+  target_bulanan?: number;
+  status_aktif?: boolean;
 }
 
 export interface TrxAmaliyah {
@@ -74,11 +77,15 @@ export const mockWarga: Warga[] = [
 ];
 
 export const mockAmaliyah: Amaliyah[] = [
-  { id_amaliyah: 'A01', nama: 'Sholat 5 Waktu Berjamaah', kategori: 'wajib', poin: 50 },
-  { id_amaliyah: 'A02', nama: 'Puasa Sunnah Senin Kamis', kategori: 'sunnah', poin: 30 },
-  { id_amaliyah: 'A03', nama: 'Kerja Bakti Desa', kategori: 'sosial', poin: 20 },
-  { id_amaliyah: 'A04', nama: 'Hadir Majelis Taklim', kategori: 'wajib', poin: 40 },
-  { id_amaliyah: 'A05', nama: 'Tilawah 1 Juz', kategori: 'sunnah', poin: 25 },
+  { id_amaliyah: 'A01', nama: 'Sholat 5 Waktu Berjamaah', kategori: 'wajib', poin: 50, deskripsi: 'Menegakkan sholat fardhu berjamaah di masjid/mushola desa', target_bulanan: 150, status_aktif: true },
+  { id_amaliyah: 'A02', nama: 'Puasa Sunnah Senin Kamis', kategori: 'sunnah', poin: 30, deskripsi: 'Melaksanakan puasa sunnah di hari Senin atau Kamis', target_bulanan: 8, status_aktif: true },
+  { id_amaliyah: 'A03', nama: 'Kerja Bakti Desa & Lingkungan', kategori: 'sosial', poin: 25, deskripsi: 'Gotong royong membersihkan saluran air dan fasilitas umum', target_bulanan: 4, status_aktif: true },
+  { id_amaliyah: 'A04', nama: 'Hadir Majelis Taklim & Pengajian', kategori: 'wajib', poin: 40, deskripsi: 'Mengikuti pembinaan rutin keislaman bersama da\'i', target_bulanan: 4, status_aktif: true },
+  { id_amaliyah: 'A05', nama: 'Tilawah Al-Quran 1 Juz', kategori: 'sunnah', poin: 25, deskripsi: 'Membaca mushaf Al-Quran mandiri atau tadarus bersama', target_bulanan: 30, status_aktif: true },
+  { id_amaliyah: 'A06', nama: 'Sedekah Subuh & Infaq Mandiri', kategori: 'sosial', poin: 20, deskripsi: 'Menyisihkan sebagian rezeki untuk kas sosial warga duafa', target_bulanan: 30, status_aktif: true },
+  { id_amaliyah: 'A07', nama: 'Sholat Tahajud / Qiyamul Lail', kategori: 'sunnah', poin: 45, deskripsi: 'Mendirikan sholat malam di sepertiga malam terakhir', target_bulanan: 15, status_aktif: true },
+  { id_amaliyah: 'A08', nama: 'Bimbingan Belajar Mengaji Anak', kategori: 'pendidikan', poin: 35, deskripsi: 'Membimbing anak-anak warga belajar membaca iqro & tajwid', target_bulanan: 12, status_aktif: true },
+  { id_amaliyah: 'A09', nama: 'Operasi Bersih Sanitasi & Masjid', kategori: 'kebersihan', poin: 25, deskripsi: 'Menjaga kebersihan dan higienitas tempat wudhu & masjid', target_bulanan: 4, status_aktif: true },
 ];
 
 export const mockHistory: TrxAmaliyah[] = [

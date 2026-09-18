@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Map, ClipboardList, Gift, Settings as SettingsIcon, FileText, Moon, Sun, FileSpreadsheet } from 'lucide-react';
+import { Map, ClipboardList, Gift, Settings as SettingsIcon, FileText, Moon, Sun, FileSpreadsheet, Award } from 'lucide-react';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -46,6 +46,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
           <NavItem to="/history" icon={<FileText size={20} />} label="Rekapan Warga" />
           <NavItem to="/reward" icon={<Gift size={20} />} label="Token & Reward" />
           <NavItem to="/lpj" icon={<FileSpreadsheet size={20} />} label="Laporan LPJ" />
+          <NavItem to="/amaliyah" icon={<Award size={20} />} label="Master Amaliyah" />
           <div style={{ height: '1px', backgroundColor: '#e2e8f0', margin: '8px 0' }} />
           <NavItem to="/settings" icon={<SettingsIcon size={20} />} label="PV Off-Grid" />
         </nav>
@@ -157,6 +158,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         <BottomNavItem to="/history" icon={<FileText size={20} />} label="Rekapan" />
         <BottomNavItem to="/reward" icon={<Gift size={20} />} label="Reward" />
         <BottomNavItem to="/lpj" icon={<FileSpreadsheet size={20} />} label="LPJ" />
+        <BottomNavItem to="/amaliyah" icon={<Award size={20} />} label="Amaliyah" />
         <BottomNavItem to="/settings" icon={<SettingsIcon size={20} />} label="PV Grid" />
       </div>
 

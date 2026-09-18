@@ -66,10 +66,13 @@ const pvIcon = new L.Icon({
   className: 'pv-map-marker',
 });
 
-const CATEGORY_COLORS = {
-  wajib: '#3b82f6',   // Blue
-  sunnah: '#10b981',  // Emerald
-  sosial: '#f59e0b',  // Amber
+const CATEGORY_COLORS: Record<string, string> = {
+  wajib: '#3b82f6',       // Blue
+  sunnah: '#10b981',      // Emerald
+  sosial: '#f59e0b',      // Amber
+  dakwah: '#8b5cf6',      // Purple
+  pendidikan: '#06b6d4',  // Cyan
+  kebersihan: '#ec4899',  // Pink
 };
 
 export const Dashboard: React.FC = () => {
