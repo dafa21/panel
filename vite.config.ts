@@ -4,4 +4,14 @@ import { defineConfig } from 'vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  preview: {
+    port: 3030,
+    host: '0.0.0.0',
+    allowedHosts: true
+  },
+  server: {
+    port: 5173,
+    host: '0.0.0.0'
+  }
 })
+
